@@ -9,8 +9,9 @@ import os
 # =============== CONFIG ===============
 
 # >>> ADJUST THESE PATHS IF NEEDED <<<
-MODEL_PATH = "models/rf_cancer_model.joblib"       # your RF model file
-LABEL_ENCODER_PATH = "models/label_encoder.joblib" # label encoder for Level (Low/Med/High)
+MODEL_PATH = "rf_model.joblib"
+LABEL_ENCODER_PATH = "label_encoder.joblib"
+
 
 # These must match the columns used when training the RF model (order doesn’t matter, names must match)
 FEATURE_COLUMNS = [
