@@ -2,22 +2,21 @@ import streamlit as st
 import pandas as pd
 import joblib
 
+st.set_page_config(page_title="Cancer Level Prediction")
+
 # Load model + encoder
-model = joblib.load("model.joblib")
-label_encoder = joblib.load("label_encoder.joblib")
+model = joblib.load("models/rf_model.joblib")
+le = joblib.load("models/label_encoder.joblib")
 
-st.set_page_config(page_title="Cancer Level Prediction", layout="centered")
-st.title("🩺 Cancer Risk Level Prediction App")
-st.write("Fill the details below:")
+st.title("🩺 Cancer Level Prediction")
 
-# -----------------------
-# INPUT FIELDS
-# -----------------------
-
+# Input fields
 inputs = {}
 
 inputs["Age"] = st.number_input("Age", 1, 120, 40)
-inputs["Gender"] = st.selectbox("Gender", ["Male", "Female"])
+gender = st.selectbox("Gender", ["Male", "Female"])
+inputs["Gender"] = 1 if gender == "Male" else 0
+
 inputs["Air Pollution"] = st.slider("Air Pollution", 1, 10, 5)
 inputs["Alcohol use"] = st.slider("Alcohol use", 1, 10, 5)
 inputs["Dust Allergy"] = st.slider("Dust Allergy", 1, 10, 5)
@@ -40,16 +39,9 @@ inputs["Frequent Cold"] = st.slider("Frequent Cold", 1, 10, 5)
 inputs["Dry Cough"] = st.slider("Dry Cough", 1, 10, 5)
 inputs["Snoring"] = st.slider("Snoring", 1, 10, 5)
 
-# Convert to dataframe
-df = pd.DataFrame([inputs])
-
-# -----------------------
-# PREDICT BUTTON
-# -----------------------
-
 if st.button("Predict"):
+    df = pd.DataFrame([inputs])
     pred_encoded = model.predict(df)[0]
-    pred_label = label_encoder.inverse_transform([pred_encoded])[0]
+    pred_label = le.inverse_transform([pred_encoded])[0]
 
-    st.success(f"Predicted Cancer Level: **{pred_label}**")
-
+    st.success(f"Cancer Level: {pred_label}")
